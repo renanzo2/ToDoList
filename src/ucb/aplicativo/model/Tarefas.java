@@ -37,5 +37,52 @@ public class Tarefas {
         this.completa = completa;
     }
 
+    //Declarando os Gets, e os Sets
+
+
+    //ID
+    public long getid(){
+        return id;
+    }
+
+    public void setid(long id){
+        this.id = id;
+    }
+
+    //Titúlo
+    public String gettitulo(){
+        return titulo;
+    }
+
+    public void settitulo(String titulo){
+        this.titulo = titulo;
+    }
+
+    //Descrição
+    public String getdescricao(){
+        return descricao;
+    }
+
+    public void setdescricao(String descricao){
+        this.descricao = descricao;
+    }
+
+    //Completa
+    public boolean iscompleta(){
+        return completa;
+    }
+
+    public void setcompleta(boolean completa){
+        this.completa = completa;
+    }
+
+    //Data Agora
+    public LocalDateTime getdataAgora(){
+        return dataAgora;
+    }
+
+    public void setdataAgora(LocalDateTime dataAgora){
+        this.dataAgora = dataAgora;
+    }
 
 }
