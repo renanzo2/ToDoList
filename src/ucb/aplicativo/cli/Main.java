@@ -1,5 +1,6 @@
 package ucb.aplicativo.cli;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 import ucb.aplicativo.control.TarefaServices;
@@ -10,7 +11,7 @@ public class Main {
         Scanner entrada = new Scanner(System.in);
 
         TarefaServices servico = new TarefaServices();
-
+        //Menu para utilização do usuário
         while (true) {
             System.out.println("\n ========= GERENCIADOR DE TAREFAS ==========");
             System.out.println("1. Criar Tarefa");
@@ -25,6 +26,7 @@ public class Main {
             entrada.nextLine();
 
             switch (opcao) {
+                //Criação de nova tarefa
                 case 1 -> {
                     String continuar;
                     do {
@@ -32,20 +34,24 @@ public class Main {
                         String titulo = entrada.nextLine();
                         System.out.println("Descrição: ");
                         String descricao = entrada.nextLine();
-                        Tarefas nova = servico.criarTarefa(titulo, descricao);
+                        Tarefas nova = servico.criarTarefas(titulo, descricao);
                         System.out.println("Tarefa criada com sucesso: " + nova.getTitulo());
                         System.out.println("Deseja criar outra tarefa? (s/n)");
                         continuar = entrada.nextLine();
                     } while (continuar.equalsIgnoreCase("s"));
 
                 }
+                //Listagem de todas as tarefas cadastradas
                 case 2 -> {
+                    DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                     List<Tarefas> tarefas = servico.ListarTarefas();
                     System.out.println("Tarefas:");
                     for (Tarefas tarefa : tarefas) {
-                        System.out.println("ID: " + tarefa.getID() + " - Título: " + tarefa.getTitulo());
+                        String dataFormatada = tarefa.getDataAgora().format(formatador);
+                        System.out.println("ID: " + tarefa.getID() + " - Título: " + tarefa.getTitulo() + " - Data: " + dataFormatada);
                     }
                 }
+                //Atualização de tarefas
                 case 3 -> {
                     String continuar;
                     do {
@@ -59,12 +65,19 @@ public class Main {
                         System.out.println("Caso a tarefa tenha sido concluída digite 1, caso contrário, digite 0");
                         int concluida = entrada.nextInt();
                         entrada.nextLine();
-                        servico.atualizarTarefa(id, titulo, descricao, concluida);
-                        System.out.println("Tarefa atualizada com sucesso");
+                        boolean sucesso = servico.atualizarTarefa(id, titulo, descricao, concluida);
+                        //Verifica se a ID da tarefa existe
+                        if(sucesso){
+                            System.out.println("Tarefa atualizada com sucesso");
+                        }else{
+                            System.out.println("ERRO: Tarefa com o ID " + id + "não encontrada.");
+                        }
+
                         System.out.println("Deseja atualizar outra tarefa? (s/n)");
                         continuar = entrada.nextLine();
                     } while (continuar.equalsIgnoreCase("s"));
                 }
+                //Removedor de tarefas cadastradas
                 case 4 -> {
                     String continuar;
                     do {
@@ -77,30 +90,38 @@ public class Main {
                         continuar = entrada.nextLine();
                     } while (continuar.equalsIgnoreCase("s"));
                 }
+                //Pesquisador de tarefas cadastradas
                 case 5 -> {
                     String continuar;
+                    DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                     do {
                         System.out.println("Pesquisar por ID: ");
                         long pesquisa = entrada.nextLong();
                         entrada.nextLine();
                         Tarefas tarefaPesquisada = servico.pesquisarTarefa(pesquisa);
+                        //Verifica se a ID inserida existe
                         if (tarefaPesquisada == null){
                             System.out.println("Nenhuma tarefa encontrada com este ID.");
                         } else {
+                            String dataFormatada = tarefaPesquisada.getDataAgora().format(formatador);
                             System.out.println("Tarefa encontrada:");
-                            System.out.println("ID: " + tarefaPesquisada.getID() + " - Título: " + tarefaPesquisada.getTitulo() + " - Descrição: " + tarefaPesquisada.getDescricao());
+                            System.out.println("ID: " + tarefaPesquisada.getID() + " - Título: " + tarefaPesquisada.getTitulo() + " - Descrição: " + tarefaPesquisada.getDescricao() + " - Data: " + dataFormatada);
                         }
                         System.out.println("Deseja realizar outra pesquisa? (s/n)");
                         continuar = entrada.nextLine();
                     } while (continuar.equalsIgnoreCase("s"));
                 }
+                //Lista as tarefas setadas como concluídas
                 case 6 -> {
+                    DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                     List<Tarefas> tarefas = servico.listarTarefasConcluidas();
                     System.out.println("Tarefas Concluidas:");
                     for (Tarefas tarefa : tarefas) {
-                        System.out.println("ID: " + tarefa.getID() + " - Título: " + tarefa.getTitulo());
+                        String dataFormatada = tarefa.getDataAgora().format(formatador);
+                        System.out.println("ID: " + tarefa.getID() + " - Título: " + tarefa.getTitulo() + " - Data: " + dataFormatada);
                     }
                 }
+                //Permite a saída do usuário
                 case 7 -> {
                     System.out.println("Tem certeza que deseja sair? (s/n)");
                     String confirmacao = entrada.nextLine();

@@ -7,39 +7,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TarefaServices {
+    //Inicialização da lista de tarefas
     private List<Tarefas> tarefas = new ArrayList<>();
+    //Incrementador de ID
     private long contadorID = 1L;
 
+    //Método criar tarefas
     public Tarefas criarTarefas(String titulo, String Descricao) {
         Tarefas novaTarefa = new Tarefas(contadorID++, titulo, Descricao, false);
         tarefas.add(novaTarefa);
         return novaTarefa;
     }
 
+    //Método para listagem de tarefas
     public List<Tarefas> ListarTarefas() {
         return tarefas;
     }
 
-    public void atualizarTarefa(long atualizacaoID, String novoTitulo, String novaDescricao) {
-
-        Tarefas tarefaParaAtualizar = null;
+    //Método para autalização de tarefas
+    public boolean atualizarTarefa(long atualizacaoID, String novoTitulo, String novaDescricao, int concluida) {
 
         for (Tarefas tarefa : tarefas) {
             if (tarefa.getID() == atualizacaoID) {
-                tarefaParaAtualizar = tarefa;
-                break;
+                tarefa.setTitulo(novoTitulo);
+                tarefa.setDescricao(novaDescricao);
+                if (concluida == 1) {
+                    tarefa.setCompleta(true);
+                }
+                return true;
             }
         }
-        if (tarefaParaAtualizar != null) {
-
-            tarefaParaAtualizar.setTitulo(novoTitulo);
-            tarefaParaAtualizar.setDescricao(novaDescricao);
-            System.out.println("Tarefa atualizado com sucesso!");
-        } else {
-            System.out.println("Erro ao atualizar tarefa!");
-        }
+        return false;
     }
 
+    //Métodos para remoção de tarefas
     public void removerTarefa(long removerID) {
         for (int i = tarefas.size() - 1; i >= 0; i--) {
             if (removerID == tarefas.get(i).getID()) {
@@ -48,6 +49,7 @@ public class TarefaServices {
         }
     }
 
+    //Método para pesquisa de tarefas cadastradas
     public Tarefas pesquisarTarefa(long pesquisa) {
         for (Tarefas tarefa : tarefas) {
             if (tarefa.getID() == pesquisa) {
@@ -57,6 +59,7 @@ public class TarefaServices {
         return null;
     }
 
+    // Método para listagem de tarefas setadas como concluídas
     public List<Tarefas> listarTarefasConcluidas() {
         List<Tarefas> TarefasConcluidas = new ArrayList<>();
         for (Tarefas tarefa : tarefas) {
