@@ -70,7 +70,7 @@ public class Main {
                         if(sucesso){
                             System.out.println("Tarefa atualizada com sucesso");
                         }else{
-                            System.out.println("ERRO: Tarefa com o ID " + id + "não encontrada.");
+                            System.out.println("ERRO: Tarefa com o ID " + id + " não encontrada.");
                         }
 
                         System.out.println("Deseja atualizar outra tarefa? (s/n)");
